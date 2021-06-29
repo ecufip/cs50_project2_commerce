@@ -1,0 +1,7 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+    <h2>Listings for {{ name }}</h2>
+    {% include "auctions/listing_list.html" with listings=listings %}
+{% endblock %}

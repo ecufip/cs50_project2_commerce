@@ -1,0 +1,23 @@
+<div class="row index-listing-list">
+    {% for listing in listings %}
+        <a class="listing-link" href="/listing/{{ listing.id }}">
+            <div class="card index-listing mb-3">
+                <div class="card-header">
+                    {{ listing.title }}
+                </div>
+                <div class="card-body">
+                    {% if listing.pic %}
+                        <img class="listing-list-image" src="{{ listing.pic.url }}">
+                    {% else %}
+                        <img class="listing-list-image"  src="/media/placeholder_images/placeholder.png">
+                    {% endif %}
+                    <p class="card-text">Price: £{{ listing.min_starting_bid }}</p>
+                    <p class="card-text">{{ listing.description}}</p>
+                    {% if listing.closed_at %}
+                        <p class="card-text"><i>Listing closed at {{ listing.closed_at }}</i></p>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>

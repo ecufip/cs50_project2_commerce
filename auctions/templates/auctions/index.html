@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <div>
+        <a href="{% url 'auctions:create_listing' %}">Create new listing</a>
+    </div>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+    {% include "auctions/listing_list.html" with listings=listings %}
+{% endblock %}

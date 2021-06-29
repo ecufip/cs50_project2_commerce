@@ -1,0 +1,130 @@
+{% extends "auctions/layout.html" %}
+{% load mathfilters %}
+
+{% block body %}
+    <div class="listing-page-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="listing-page-details">
+                    {% if listing.pic %}
+                        <img src="{{ listing.pic.url }}" class="listing-page-image">
+                    {% else %}
+                        <img src="/media/placeholder_images/placeholder.png" class="listing-page-image">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="listing-page-details">
+                    <h1>
+                        {{ listing.title }}
+                    </h1>
+                </div>
+                <div class="listing-page-details">
+                    {% if watchlist %}
+                        On watchlist
+                    {% endif %}
+                </div>
+                <div class="listing-page-details">
+                    <b>Category:</b> {{ listing.category }}
+                </div>
+                <div class="listing-page-details">
+                    <b>Minimum starting bid:</b> £{{ listing.min_starting_bid }}
+                </div>
+                <div class="listing-page-details">
+                    <b>Current bid:</b>
+                    {% if current_bid %}
+                        £{{ current_bid.amount }}
+                    {% else %}
+                        no current bids
+                    {% endif %}
+                </div>
+                <div class="listing-page-details">
+                    {{ listing.description }}
+                </div>
+                {% if listing.closed_at %}
+                    <div class="listing-page-details">
+                        <p>Listing closed at {{ listing.closed_at }}</p>
+                        {% if listing.winner == user %}
+                            <p>You had the winning bid!</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                        {% if listing.user == user %}
+                            <div class="listing-page-details">
+                                <form action="{% url 'auctions:close_listing' listing.id %}"  method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input class="btn btn-primary" type="submit" value="Close Listing">
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class="listing-page-details">
+                                {% if watchlist %}
+                                    <form action="{% url 'auctions:watchlist_remove' listing.id %}"  method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input class="btn btn-primary" type="submit" value="Remove from Watchlist">
+                                    </form>
+                                {% else %}
+                                    <form action="{% url 'auctions:watchlist_add' listing.id %}"  method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input class="btn btn-primary" type="submit" value="Add to Watchlist">
+                                    </form>
+                                {% endif %}
+                            </div>
+                            <div class="listing-page-details">
+                                <form action="{% url 'auctions:place_bid' listing.id %}"  method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {% if current_bid %}
+                                        <input name="bid" type="number" step="0.01" value="0.00" min="{{ current_bid.amount|addition:0.01 }}"/>
+                                    {% else %}
+                                        <input name="bid" type="number" step="0.01" value="0.00" min="{{ listing.min_starting_bid }}"/>
+                                    {% endif %}
+                                    <input class="btn btn-primary" type="submit" value="Place bid">
+                                </form>
+                            </div>
+                        {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row listing-page-comment-section">
+            <div class="col-md-12">
+                <div class="listing-page-comment-section-component">
+                    <h3>Comments</h3>
+                </div>
+                <div class="listing-page-comment-section-component">
+                    <form action="{% url 'auctions:comment' listing.id %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input class="form-control listing-page-comment-title" type="text" name="title" placeholder="Title">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control listing-page-comment-input" type="text" name="comment" placeholder="I think that..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input class="btn btn-primary" type="submit" value="Comment">
+                        </div>
+                    </form>
+                </div>
+                {% if comments %}
+                    <div class="listing-page-comment-section-component">
+                        {% for comment in comments %}
+                            <div class="card listing-page-comment mb-3">
+                                <div class="card-header">
+                                    {{ comment.title }}
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ comment.text }}</p>
+                                    <p class="card-text"><i>by {{ comment.user.username }} at {{ comment.created_at }}</i></p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="listing-page-comment-section-component">
+                        <img src="/media/placeholder_images/no_comment.gif" class="listing-page-no-comment-gif">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

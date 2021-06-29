@@ -1,0 +1,67 @@
+body {
+    padding: 10px;
+}
+
+.form-component {
+    padding: 5px
+}
+
+.form-section {
+    padding: 10px
+}
+
+.index-listing-list {
+    margin: 20px
+}
+
+.index-listing{
+    margin: 20px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.listing-link, .listing-link:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+.listing-list-image {
+    height: 250px;
+    width: 250px;
+}
+
+.listing-page-body {
+    margin: 20px;
+    padding: 20px;
+}
+
+.listing-page-image {
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.listing-page-details {
+    margin: 10px;
+    padding: 10px;
+}
+
+.listing-page-comment-section {
+    margin: 20px;
+    padding: 20px;
+}
+
+.listing-page-comment {
+    margin: 5px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.listing-page-comment-section-component {
+    padding: 10px;
+}
+
+.listing-page-no-comment-gif {
+    height: 250px;
+}
